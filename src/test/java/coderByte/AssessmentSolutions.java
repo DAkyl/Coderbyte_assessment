@@ -18,7 +18,7 @@ public class AssessmentSolutions {
     public void getStatusCode200() {
 
         given().header("Content-Type", "application/json").header("X-Auth-Token", token)
-                .when().get(URL).then().assertThat().statusCode(200).extract().response();
+                .when().get(URL).then().assertThat().statusCode(200);
     }
     /**
         Validate 403 http code on failed authentication
@@ -27,13 +27,13 @@ public class AssessmentSolutions {
     public void getStatusCode403() {
 
         given().header("Content-Type", "application/json")
-                .when().get(URL).then().assertThat().statusCode(403).extract().response();
+                .when().get(URL).then().assertThat().statusCode(403);
     }
     /**
      Validate more than 20 squad members are there in API response
      **/
     @Test
-    public void squadNumebr() {
+    public void squadNumber() {
 
         Response response = given().header("Content-Type", "application/json").header("X-Auth-Token", token)
                 .when().get(URL).then().assertThat().statusCode(200).extract().response();
