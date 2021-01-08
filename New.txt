@@ -1,0 +1,118 @@
+package untitled.OOP;
+
+public class test {
+
+    public static void main(String[] args) {
+
+        String time = "11:01 PM";
+        String time1 = "11:10 AM";
+        String negativeHourAM = "-1:07 AM";
+        String negativeHourPM = "-2:00 PM";
+        String negativeMinute = "01:-34 AM";
+        String noMeridiemProvided = "13:23";
+
+        System.out.println(printResult(time, 60).equalsIgnoreCase("0:01 AM"));
+        System.out.println(printResult(time1, 60).equalsIgnoreCase("12:10 PM"));
+        System.out.println(printResult(time1, 200).equalsIgnoreCase("2:30 PM"));
+//        String message1 = printResult(negativeHourAM,30);
+//        System.out.println(message1.equalsIgnoreCase("Expected to use 12 Hour Clock."));
+        System.out.println(printResult(negativeHourAM, 30));
+//        System.out.println(printResult(negativeHourPM, 30));
+//        System.out.println(printResult(negativeMinute, 30));
+
+    }
+
+
+
+
+        public static String printResult(String time, int data) {
+
+        /*
+          Variables initialization from String
+        */
+        String[] hourValue = time.split(":");
+        int hourNum = Integer.valueOf(hourValue[0]);
+        String timeUnits = hourValue[1];
+        String[] minutesValue = timeUnits.split(" ");
+        int minutes = Integer.valueOf(minutesValue[0]);
+        String meridiem = minutesValue[1];
+
+
+        /*
+          Input data validation
+        */
+            errorMessages(hourNum,minutes,meridiem);
+
+         /*
+           Data information calculation
+         */
+        int newHours = newHour(data, minutes,hourNum);
+        int newMinutes = newMinute(data, minutes);
+
+        /*
+          Final time and meridiem result after calculation
+        */
+        String result = meridiemIdentification(newHours, newMinutes,meridiem);
+
+            return result;
+    }
+
+
+    public static void errorMessages(int hour, int minute, String meridiem){
+
+        try{
+        if (hour > 12 || hour<00) {
+            throw new IllegalArgumentException("Expected to use 12 Hour Clock.");
+        }else if(minute>60 || minute<00){
+            throw new IllegalArgumentException("Expected to use 0-60 minutes.");
+        }else if( !meridiem.equalsIgnoreCase("PM") && !meridiem.equalsIgnoreCase("AM")){
+            throw new IllegalArgumentException("Expected to use ante-meridiem or post-meridiem.");
+        }
+        }catch(Exception e){
+            //System.out.println(e.getMessage());
+            }
+    }
+
+    public static String meridiemIdentification(int hour, int newMinutes, String meridiem){
+
+        String newMeridiem = "";
+        if(hour>11 && meridiem.equalsIgnoreCase("PM")){
+            hour = hour - 12;
+            newMeridiem = "AM";
+        }else if(hour>11 && meridiem.equalsIgnoreCase("AM")){
+           if(hour>12){
+               hour =hour - 12;
+           }else{
+               hour = hour;
+           }
+            newMeridiem = "PM";
+        }else{
+            newMeridiem = meridiem;
+        }
+
+        String showMinutes ="";
+        if(newMinutes>=0 && newMinutes<=9){
+            showMinutes = "0" + newMinutes;
+        }else{
+            showMinutes = String.valueOf(newMinutes);
+        }
+        return hour + ":" + showMinutes + " " + newMeridiem;
+    }
+
+    public static int newHour(int data, int min, int hourNum){
+        int addedMinutes = data%60;
+        int addedHours = data/60;
+        int tempMinutes = min+addedMinutes;
+        int tempHours = tempMinutes/60;
+        int newHours = hourNum+addedHours+tempHours;
+        return newHours;
+    }
+
+    public static int newMinute(int data, int min){
+        int addedMinutes = data%60;
+        int tempMinutes = min+addedMinutes;
+        int newMinutes = tempMinutes%60;
+        return newMinutes;
+    }
+
+}
